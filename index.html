@@ -1,0 +1,581 @@
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Government Land Registration Portal</title>  
+    <style>  
+        * {  
+            margin: 0;  
+            padding: 0;  
+            box-sizing: border-box;  
+        }  body {  
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);  
+        min-height: 100vh;  
+        color: #333;  
+    }  
+
+    .container {  
+        max-width: 900px;  
+        margin: 0 auto;  
+        padding: 20px;  
+    }  
+
+    .page {  
+        display: none;  
+        animation: fadeIn 0.5s ease-in;  
+    }  
+
+    .page.active {  
+        display: block;  
+    }  
+
+    @keyframes fadeIn {  
+        from { opacity: 0; transform: translateY(20px); }  
+        to { opacity: 1; transform: translateY(0); }  
+    }  
+
+    .card {  
+        background: rgba(255, 255, 255, 0.95);  
+        border-radius: 20px;  
+        padding: 40px;  
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);  
+        backdrop-filter: blur(10px);  
+        margin-top: 20px;  
+    }  
+
+    h1 {  
+        color: #1e3c72;  
+        text-align: center;  
+        margin-bottom: 10px;  
+        font-size: 2.5em;  
+        text-transform: uppercase;  
+        letter-spacing: 2px;  
+    }  
+
+    .subtitle {  
+        text-align: center;  
+        color: #666;  
+        margin-bottom: 30px;  
+        font-size: 1.1em;  
+    }  
+
+    .government-logo {  
+        width: 80px;  
+        height: 80px;  
+        background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);  
+        border-radius: 50%;  
+        margin: 0 auto 20px;  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        font-size: 2em;  
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);  
+    }  
+
+    .form-group {  
+        margin-bottom: 25px;  
+    }  
+
+    label {  
+        display: block;  
+        margin-bottom: 8px;  
+        color: #1e3c72;  
+        font-weight: 600;  
+        font-size: 0.95em;  
+        text-transform: uppercase;  
+        letter-spacing: 0.5px;  
+    }  
+
+    input[type="text"],  
+    input[type="password"],  
+    input[type="number"],  
+    input[type="tel"],  
+    input[type="date"],  
+    select,  
+    textarea {  
+        width: 100%;  
+        padding: 15px;  
+        border: 2px solid #e0e0e0;  
+        border-radius: 10px;  
+        font-size: 1em;  
+        transition: all 0.3s ease;  
+        background: #f8f9fa;  
+    }  
+
+    input:focus,  
+    select:focus,  
+    textarea:focus {  
+        outline: none;  
+        border-color: #2a5298;  
+        background: #fff;  
+        box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);  
+    }  
+
+    .btn {  
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);  
+        color: white;  
+        padding: 15px 40px;  
+        border: none;  
+        border-radius: 30px;  
+        font-size: 1.1em;  
+        cursor: pointer;  
+        transition: all 0.3s ease;  
+        text-transform: uppercase;  
+        letter-spacing: 1px;  
+        font-weight: 600;  
+        display: inline-block;  
+        margin: 10px 5px;  
+    }  
+
+    .btn:hover {  
+        transform: translateY(-3px);  
+        box-shadow: 0 10px 30px rgba(30, 60, 114, 0.4);  
+    }  
+
+    .btn-secondary {  
+        background: linear-gradient(135deg, #666 0%, #888 100%);  
+    }  
+
+    .btn-success {  
+        background: linear-gradient(135deg, #138808 0%, #1a6b0c 100%);  
+    }  
+
+    .btn-danger {  
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);  
+    }  
+
+    .document-grid {  
+        display: grid;  
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  
+        gap: 20px;  
+        margin-top: 30px;  
+    }  
+
+    .document-card {  
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);  
+        border-radius: 15px;  
+        padding: 30px;  
+        text-align: center;  
+        cursor: pointer;  
+        transition: all 0.3s ease;  
+        border: 2px solid transparent;  
+    }  
+
+    .document-card:hover {  
+        transform: translateY(-5px);  
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);  
+        border-color: #2a5298;  
+    }  
+
+    .document-icon {  
+        font-size: 3em;  
+        margin-bottom: 15px;  
+    }  
+
+    .document-title {  
+        font-size: 1.2em;  
+        color: #1e3c72;  
+        font-weight: 600;  
+        margin-bottom: 10px;  
+    }  
+
+    .document-desc {  
+        color: #666;  
+        font-size: 0.9em;  
+    }  
+
+    .section-title {  
+        color: #1e3c72;  
+        font-size: 1.5em;  
+        margin-bottom: 25px;  
+        padding-bottom: 10px;  
+        border-bottom: 3px solid #2a5298;  
+        display: flex;  
+        align-items: center;  
+        gap: 10px;  
+    }  
+
+    .section-number {  
+        background: #2a5298;  
+        color: white;  
+        width: 35px;  
+        height: 35px;  
+        border-radius: 50%;  
+        display: flex;  
+        align-items: center;  
+        justify-content: center;  
+        font-weight: bold;  
+    }  
+
+    .form-row {  
+        display: grid;  
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  
+        gap: 20px;  
+    }  
+
+    .progress-bar {  
+        background: #e0e0e0;  
+        height: 8px;  
+        border-radius: 10px;  
+        margin-bottom: 30px;  
+        overflow: hidden;  
+    }  
+
+    .progress-fill {  
+        background: linear-gradient(90deg, #ff9933 0%, #138808 100%);  
+        height: 100%;  
+        width: 0%;  
+        transition: width 0.5s ease;  
+        border-radius: 10px;  
+    }  
+
+    .progress-steps {  
+        display: flex;  
+        justify-content: space-between;  
+        margin-bottom: 10px;  
+        font-size: 0.85em;  
+        color: #666;  
+    }  
+
+    .step {  
+        text-align: center;  
+        flex: 1;  
+    }  
+
+    .step.active {  
+        color: #2a5298;  
+        font-weight: 600;  
+    }  
+
+    .verification-badge {  
+        background: linear-gradient(135deg, #138808 0%, #1a6b0c 100%);  
+        color: white;  
+        padding: 5px 15px;  
+        border-radius: 20px;  
+        font-size: 0.85em;  
+        display: inline-flex;  
+        align-items: center;  
+        gap: 5px;  
+        margin-left: 10px;  
+    }  
+
+    .required {  
+        color: #dc3545;  
+    }  
+
+    .info-box {  
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);  
+        border-left: 4px solid #2a5298;  
+        padding: 15px;  
+        border-radius: 0 10px 10px 0;  
+        margin-bottom: 25px;  
+        font-size: 0.95em;  
+    }  
+
+    .summary-box {  
+        background: #f8f9fa;  
+        border-radius: 15px;  
+        padding: 25px;  
+        margin-top: 20px;  
+    }  
+
+    .summary-item {  
+        display: flex;  
+        justify-content: space-between;  
+        padding: 12px 0;  
+        border-bottom: 1px solid #dee2e6;  
+    }  
+
+    .summary-item:last-child {  
+        border-bottom: none;  
+    }  
+
+    .summary-label {  
+        font-weight: 600;  
+        color: #1e3c72;  
+    }  
+
+    .hash-display {  
+        background: #1e1e1e;  
+        color: #00ff00;  
+        font-family: 'Courier New', monospace;  
+        padding: 15px;  
+        border-radius: 10px;  
+        word-break: break-all;  
+        margin-top: 10px;  
+        font-size: 0.9em;  
+    }  
+
+    .navigation-buttons {  
+        display: flex;  
+        justify-content: space-between;  
+        margin-top: 30px;  
+        padding-top: 20px;  
+        border-top: 2px solid #e0e0e0;  
+    }  
+
+    .error-message {  
+        background: #f8d7da;  
+        color: #721c24;  
+        padding: 12px;  
+        border-radius: 8px;  
+        margin-bottom: 20px;  
+        display: none;  
+    }  
+
+    .success-message {  
+        background: #d4edda;  
+        color: #155724;  
+        padding: 12px;  
+        border-radius: 8px;  
+        margin-bottom: 20px;  
+        display: none;  
+    }  
+
+    @media (max-width: 768px) {  
+        .card {  
+            padding: 25px;  
+        }  
+          
+        h1 {  
+            font-size: 1.8em;  
+        }  
+          
+        .form-row {  
+            grid-template-columns: 1fr;  
+        }  
+    }  
+
+    .checkbox-group {  
+        display: flex;  
+        align-items: center;  
+        gap: 10px;  
+        margin-top: 20px;  
+    }  
+
+    .checkbox-group input[type="checkbox"] {  
+        width: 20px;  
+        height: 20px;  
+        cursor: pointer;  
+    }  
+
+    .encrypt-indicator {  
+        display: inline-flex;  
+        align-items: center;  
+        gap: 5px;  
+        color: #138808;  
+        font-size: 0.9em;  
+        margin-top: 5px;  
+    }  
+</style>
+
+</head>  
+<body>  <!-- Page 1: Login -->  
+<div id="page1" class="page active">  
+    <div class="container">  
+        <div class="card">  
+            <div class="government-logo">🇮🇳</div>  
+            <h1>Government Portal</h1>  
+            <p class="subtitle">Secure Document Registration System</p>  
+              
+            <div class="error-message" id="loginError">Invalid username or password!</div>  
+              
+            <form id="loginForm">  
+                <div class="form-group">  
+                    <label>Username <span class="required">*</span></label>  
+                    <input type="text" id="loginUsername" placeholder="Enter your username" required>  
+                </div>  
+                  
+                <div class="form-group">  
+                    <label>Password <span class="required">*</span></label>  
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>  
+                </div>  
+                  
+                <div style="text-align: center; margin-top: 30px;">  
+                    <button type="submit" class="btn">Login Securely</button>  
+                </div>  
+            </form>  
+              
+            <div style="text-align: center; margin-top: 20px; color: #666; font-size: 0.9em;">  
+                <p>🔒 Secured with 256-bit encryption</p>  
+            </div>  
+        </div>  
+    </div>  
+</div>  
+
+<!-- Page 2: Document Selection -->  
+<div id="page2" class="page">  
+    <div class="container">  
+        <div class="card">  
+            <div class="government-logo">📋</div>  
+            <h1>Select Document Type</h1>  
+            <p class="subtitle">Welcome, <span id="userDisplay"></span> | Choose a service</p>  
+              
+            <div class="document-grid">  
+                <div class="document-card" onclick="showLandOptions()">  
+                    <div class="document-icon">🏠</div>  
+                    <div class="document-title">Land Registration</div>  
+                    <div class="document-desc">Register new land or review existing records</div>  
+                </div>  
+                  
+                <div class="document-card" onclick="showComingSoon()">  
+                    <div class="document-icon">👶</div>  
+                    <div class="document-title">Birth Certificate</div>  
+                    <div class="document-desc">Apply for or download birth certificates</div>  
+                </div>  
+                  
+                <div class="document-card" onclick="showComingSoon()">  
+                    <div class="document-icon">⚰️</div>  
+                    <div class="document-title">Death Certificate</div>  
+                    <div class="document-desc">Register or obtain death certificates</div>  
+                </div>  
+                  
+                <div class="document-card" onclick="showComingSoon()">  
+                    <div class="document-icon">💍</div>  
+                    <div class="document-title">Marriage Certificate</div>  
+                    <div class="document-desc">Register marriages and obtain certificates</div>  
+                </div>  
+            </div>  
+              
+            <div style="text-align: center; margin-top: 30px;">  
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>  
+            </div>  
+        </div>  
+    </div>  
+</div>  
+
+<!-- Page 3: Land Options -->  
+<div id="page3" class="page">  
+    <div class="container">  
+        <div class="card">  
+            <div class="government-logo">🏠</div>  
+            <h1>Land Registration Services</h1>  
+            <p class="subtitle">Select an option to proceed</p>  
+              
+            <div class="document-grid" style="max-width: 600px; margin: 30px auto;">  
+                <div class="document-card" onclick="startNewRegistration()">  
+                    <div class="document-icon">📝</div>  
+                    <div class="document-title">Register New Document</div>  
+                    <div class="document-desc">Create a new land registration entry with all details</div>  
+                </div>  
+                  
+                <div class="document-card" onclick="reviewPrevious()">  
+                    <div class="document-icon">🔍</div>  
+                    <div class="document-title">Review Previous Documents</div>  
+                    <div class="document-desc">Search and view existing registered documents</div>  
+                </div>  
+            </div>  
+              
+            <div style="text-align: center;">  
+                <button class="btn btn-secondary" onclick="goToPage(2)">Back</button>  
+            </div>  
+        </div>  
+    </div>  
+</div>  
+
+<!-- Page 4: New Registration Login -->  
+<div id="page4" class="page">  
+    <div class="container">  
+        <div class="card">  
+            <div class="government-logo">🔐</div>  
+            <h1>Registration Authentication</h1>  
+            <p class="subtitle">Create unique credentials for this registration</p>  
+              
+            <div class="info-box">  
+                <strong>⚠️ Important:</strong> Create a unique username and password for this specific land registration. This ensures security and traceability of your document.  
+            </div>  
+              
+            <div class="error-message" id="regLoginError">Please fill all fields correctly!</div>  
+              
+            <form id="regLoginForm">  
+                <div class="form-group">  
+                    <label>Unique Registration Username <span class="required">*</span></label>  
+                    <input type="text" id="regUsername" placeholder="Create unique username for this registration" required>  
+                    <div class="encrypt-indicator">🔒 Will be encrypted with SHA-256</div>  
+                </div>  
+                  
+                <div class="form-group">  
+                    <label>Registration Password <span class="required">*</span></label>  
+                    <input type="password" id="regPassword" placeholder="Create secure password" required>  
+                </div>  
+                  
+                <div class="form-group">  
+                    <label>Confirm Password <span class="required">*</span></label>  
+                    <input type="password" id="regPasswordConfirm" placeholder="Confirm your password" required>  
+                </div>  
+                  
+                <div style="text-align: center; margin-top: 30px;">  
+                    <button type="submit" class="btn">Proceed to Registration</button>  
+                    <button type="button" class="btn btn-secondary" onclick="goToPage(3)">Back</button>  
+                </div>  
+            </form>  
+        </div>  
+    </div>  
+</div>  
+
+<!-- Page 5: Owner Details -->  
+<div id="page5" class="page">  
+    <div class="container">  
+        <div class="card">  
+            <div class="progress-bar">  
+                <div class="progress-fill" style="width: 12.5%"></div>  
+            </div>  
+            <div class="progress-steps">  
+                <div class="step active">Owner</div>  
+                <div class="step">Land</div>  
+                <div class="step">Boundary</div>  
+                <div class="step">Transaction</div>  
+                <div class="step">Govt</div>  
+                <div class="step">History</div>  
+                <div class="step">Tax</div>  
+                <div class="step">EC</div>  
+            </div>  
+              
+            <div class="section-title">  
+                <span class="section-number">1</span>  
+                Owner Details  
+            </div>  
+              
+            <form id="ownerForm">  
+                <div class="form-group">  
+                    <label>Primary Owner Name <span class="required">*</span></label>  
+                    <input type="text" id="ownerName" placeholder="Enter full legal name of owner" required>  
+                </div>  
+                  
+                <div class="form-group">  
+                    <label>Relationship Details (Relatives)</label>  
+                    <div class="form-row">  
+                        <input type="text" placeholder="Husband/Wife Name (if applicable)" id="spouseName">  
+                        <input type="text" placeholder="Father/Mother Name" id="parentName">  
+                        <input type="text" placeholder="Son/Daughter Name (if applicable)" id="childName">  
+                    </div>  
+                </div>  
+                  
+                <div class="form-group">  
+                    <label>Land Address <span class="required">*</span></label>  
+                    <textarea id="landAddress" rows="3" placeholder="Complete address of the land property" required></textarea>  
+                </div>  
+                  
+                <div class="form-group">  
+                    <label>Identification Documents <span class="required">*</span></label>  
+                    <div class="form-row">  
+                        <input type="text" placeholder="Aadhar Number" id="aadharNumber" required>  
+                        <input type="text" placeholder="PAN Number" id="panNumber">  
+                        <input type="text" placeholder="Other ID (Voter ID/Passport/DL)" id="otherId">  
+                    </div>  
+                </div>  
+                  
+                <div class="form-group">  
+                    <label>Contact Information <span class="required">*</span></label>  
+                    <div class="form-row">  
+                        <input type="tel" placeholder="Primary Phone Number" id="phone1" required>  
+                        <input type="tel" placeholder="Alternative Phone Number" id="phone2">  
+                        <input type="text" placeholder="Email Address" id="email">  
+                    </div>  
+                </div>  
+                  
+                <div class="navigation-buttons">  
+                    <button type="button" class="btn btn-secondary" onclick="goToPage(4)">P
+
+Back-end code
